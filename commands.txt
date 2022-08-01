@@ -1,3 +1,4 @@
+from news.models import *
 user1 = User.objects.create_user("User1")
 user2 = User.objects.create_user("User2")
 author1 = Author.objects.create(user_rating=0, user=user1)
@@ -8,7 +9,7 @@ c3 = Category.objects.create(category_name="Future")
 c4 = Category.objects.create(category_name="Music") 
 a1 = Post.objects.create(author=author1, n_or_a=Post.article, title="Test", body="Just a simple test", post_rating = 0)
 a2 = Post.objects.create(author=author1, n_or_a=Post.article, title="Test2", body="Just a simple test2", post_rating = 0)
-n1 = Post.objects.create(author=author1, n_or_a=Post.news, title="NewsTest", body="Just a simple news test", post_rating = 0)
+n1 = Post.objects.create(author=author2, n_or_a=Post.news, title="NewsTest", body="Just a simple news test", post_rating = 0)
 PostCategory.objects.create(post=a1, category=c1)
 PostCategory.objects.create(post=a1, category=c2)
 PostCategory.objects.create(post=a2, category=c2)
@@ -20,16 +21,21 @@ comm2 = Comment.objects.create(post=a2, user=user1, text="Wow", comment_rating=0
 comm3 = Comment.objects.create(post=a2, user=user2, text="Impressive", comment_rating=0)
 comm4 = Comment.objects.create(post=n1, user=user2, text="Nice", comment_rating=0)
 a1.like()
+a1.like()
+a1.like()
+a1.like()
 a2.like()
 a2.like()
 a2.dislike()
 comm1.like()
+comm1.like()
+comm1.like()
 comm3.like()
 comm3.dislike()
+author1.update_rating()
+author2.update_rating()
+best_author = Author.objects.all().order_by('-user_rating')[0]
+best_author.user.username, best_author.user_rating
 best_post = Post.objects.all().order_by('-post_rating')[0]
 best_post.create_date, best_post.author.user.username, best_post.post_rating, best_post.title, best_post.preview()
-for j in Comment.objects.filter(post=best_post): 
-    j.create_time
-    j.get_username()
-    j.text
-    j.comment_rating
+Comment.objects.all().filter(post=best_post).values("create_time", "user__username", "comment_rating", "text")
