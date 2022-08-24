@@ -32,7 +32,6 @@ class Post(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE, default=news)
     n_or_a = models.CharField(max_length=2, choices=NEWS_OR_ARTICLE)
     create_date = models.DateTimeField(auto_now_add=True)
-    create_time = models.TimeField(auto_now_add=True)
     category = models.ManyToManyField(Category, through='PostCategory')
     title = models.CharField(max_length=120)
     body = models.TextField()
@@ -52,6 +51,12 @@ class Post(models.Model):
             return self.body[:124]+'....'
         else:
             return self.body
+
+    def __str__(self):
+        return f'{self.title.title()}: {self.preview()}'
+
+    def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с товаром
+        return f'/posts/{self.id}'
 
 
 class PostCategory(models.Model):

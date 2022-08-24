@@ -1,0 +1,14 @@
+{% extends 'flatpages/default.html' %}
+{% load news_filters %}
+{% block title %}
+    {{ post.title|censor }}
+{% endblock title %}
+{% block content %}
+    <p>Author: {{ post.author.user.username }}</p>
+    <p>Date: {{ post.create_date.day }}.{{ post.create_date.month }}.{{ post.create_date.year }} {{ post.create_date.hour }}:{{ post.create_date.minute }}</p>
+    <h1>{{ post.title|censor }}</h1>
+    <h3>{{ post.body|censor }}</h3>
+    <h5>Rating: {{ post.post_rating }}</h5>
+    <a href="{% url 'post_update' post.id %}">Edit</a>
+    <a href="{% url 'post_delete' post.id %}">Delete</a>
+{% endblock content %}
